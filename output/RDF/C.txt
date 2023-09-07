@@ -1,0 +1,19 @@
+@prefix : <http://purl.org/net/ns/jsonrdf/> .
+[
+:code "011002";
+:population [
+:2005年 1880863;
+:2010年 1913545
+];
+:memo "ああ";
+:name "sapporo"
+] .
+[
+:code "012025";
+:population [
+:2005年 294264;
+:2010年 279127
+];
+:memo "iい";
+:name "hakodate"
+] .
