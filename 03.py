@@ -1,10 +1,12 @@
 import os
 import json
 
+ireko_filename_list = ["2-排出量.json", "6-移動量.json"]
 def read_json_files(directory_path):
     json_data = []
     for filename in os.listdir(directory_path):
-        if filename.endswith(".json") and filename != "3-総農家数.json":
+        print(filename)
+        if filename.endswith(".json") and filename not in ireko_filename_list:        
             file_path = os.path.join(directory_path, filename)
             with open(file_path, "r") as file:
                 data = json.load(file)
