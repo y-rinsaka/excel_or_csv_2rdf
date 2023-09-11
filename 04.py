@@ -6,7 +6,7 @@ rdf_prefixes = {
     "rdf": "<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
 }
 
-def json_to_rdf(json_data, prefix_map):
+def json_to_rdf(json_data, base_uri, prefix_map):
     rdf_text = ""
     rdf_text += "@prefix : {} .\n".format(prefix_map[""])
     rdf_text += "@prefix rdf: {} .\n\n".format(prefix_map["rdf"])
@@ -41,12 +41,14 @@ def dict_value_to_rdf(key, value, rdf_text):
 
 
 #jsonファイルの読み込み
-with open("output/C/C.json", "r", encoding="utf-8") as json_file:
-    input_data = json.load(json_file)
+json_file_names = ["A", "B", "C"]
+for file_name in json_file_names:
+    with open("output/{0}/{0}.json".format(file_name), "r", encoding="utf-8") as json_file:
+        input_data = json.load(json_file)
 
-# RDFデータ生成
-base_uri = "http://example.org/"
-rdf_text = json_to_rdf(input_data, base_uri, rdf_prefixes)
+    # RDFデータ生成
+    base_uri = "http://example.org/"
+    rdf_text = json_to_rdf(input_data, base_uri, rdf_prefixes)
 
-with open("output/RDF/C.txt", "w") as file:
-    file.write(rdf_text)
+    with open("output/RDF/{0}.txt".format(file_name), "w") as file:
+        file.write(rdf_text)
