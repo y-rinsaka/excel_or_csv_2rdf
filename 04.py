@@ -50,5 +50,5 @@ for file_name in json_file_names:
     base_uri = "http://example.org/"
     rdf_text = json_to_rdf(input_data, base_uri, rdf_prefixes)
 
-    with open("output/RDF/{0}.txt".format(file_name), "w") as file:
+    with open("output/RDF/{0}.rdf".format(file_name), "w") as file:
         file.write(rdf_text)
