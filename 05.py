@@ -16,26 +16,37 @@ def json_to_rdf(json_data, base_uri, prefix_map):
         rdf_text += "\n"
         for key, value in entry.items():
             if isinstance(value, dict):
-                rdf_text += "  :{} [\n".format(key)
-                for sub_key, sub_value in value.items():
-                    rdf_text += '    :{} "{}";\n'.format(sub_key, sub_value)
-                rdf_text += "  ];\n"
+                rdf_text = dict_value_to_rdf(key, value, rdf_text)
+            
+            elif isinstance(value, list):
+                for dvalue_in_li in value:
+                    if isinstance(dvalue_in_li, dict):
+                        rdf_text = dict_value_to_rdf(key, dvalue_in_li, rdf_text)
+                    else:
+                        print("error")
+                
             else:
                 rdf_text += '  :{} "{}";\n'.format(key, value)
         rdf_text += " .\n\n"
 
     return rdf_text
 
+def dict_value_to_rdf(key, value, rdf_text):
+  rdf_text += "  :{} [\n".format(key)
+  for sub_key, sub_value in value.items():
+      rdf_text += '    :{} "{}";\n'.format(sub_key, sub_value)
+  rdf_text += "  ];\n"
+  return rdf_text
+  
 
 
-# C.jsonファイルを読み込む
-with open("output/B/B.json", "r", encoding="utf-8") as json_file:
+#jsonファイルの読み込み
+with open("output/C/C.json", "r", encoding="utf-8") as json_file:
     input_data = json.load(json_file)
 
 # RDFデータ生成
 base_uri = "http://example.org/"
 rdf_text = json_to_rdf(input_data, base_uri, rdf_prefixes)
 
-print(rdf_text)
-with open("output/RDF/B.txt", "w") as file:
+with open("output/RDF/C.txt", "w") as file:
     file.write(rdf_text)

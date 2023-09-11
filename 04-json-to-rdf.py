@@ -1,36 +1,52 @@
 import json
 
-def jsonToRDF(json_data, parent_key=""):
+# RDF Turtle形式のプレフィックス定義
+rdf_prefixes = {
+    "": "<http://purl.org/net/ns/jsonrdf/>",
+    "rdf": "<http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+}
+
+def json_to_rdf(json_data, prefix_map):
     rdf_text = ""
+    rdf_text += "@prefix : {} .\n".format(prefix_map[""])
+    rdf_text += "@prefix rdf: {} .\n\n".format(prefix_map["rdf"])
 
-    for data in json_data:
-        rdf_text += "[\n"
-        for key, value in data.items():
-            full_key = f"{parent_key}:{key}" if parent_key else key
-
+    for i, entry in enumerate(json_data, start=1):
+        rdf_text += ":rdf_{} ".format(i)
+        rdf_text += "\n"
+        for key, value in entry.items():
             if isinstance(value, dict):
-                rdf_text += jsonToRDF([value], full_key)
+                rdf_text = dict_value_to_rdf(key, value, rdf_text)
+            
             elif isinstance(value, list):
-                for item in value:
-                    if isinstance(item, dict):
-                        rdf_text += jsonToRDF([item], full_key)
-            elif isinstance(value, str):
-                rdf_text += f'{full_key} "{value}" ;\n'
+                for dvalue_in_li in value:
+                    if isinstance(dvalue_in_li, dict):
+                        rdf_text = dict_value_to_rdf(key, dvalue_in_li, rdf_text)
+                    else:
+                        print("error")
+                
             else:
-                rdf_text += f"{full_key} {value} ;\n"
-
-        rdf_text = rdf_text.rstrip(";\n") + "\n"
-        rdf_text += "] .\n"
+                rdf_text += '  :{} "{}";\n'.format(key, value)
+        rdf_text += " .\n\n"
 
     return rdf_text
 
-# JSONファイルを読み込む
-input_json = "B/B.json"
-with open("output/" + input_json, "r") as file:
-    json_data = json.load(file)
-rdf_data = jsonToRDF(json_data)
+def dict_value_to_rdf(key, value, rdf_text):
+    rdf_text += "  :{} [\n".format(key)
+    for sub_key, sub_value in value.items():
+        rdf_text += '    :{} "{}";\n'.format(sub_key, sub_value)
+    rdf_text += "  ];\n"
+    return rdf_text
+  
 
-# プレフィックスを追加
-rdf_data = f"@prefix : <http://purl.org/net/ns/jsonrdf/> .\n{rdf_data}"
-with open("output/RDF/B.txt", "w") as file:
-    file.write(rdf_data)
+
+#jsonファイルの読み込み
+with open("output/C/C.json", "r", encoding="utf-8") as json_file:
+    input_data = json.load(json_file)
+
+# RDFデータ生成
+base_uri = "http://example.org/"
+rdf_text = json_to_rdf(input_data, base_uri, rdf_prefixes)
+
+with open("output/RDF/C.txt", "w") as file:
+    file.write(rdf_text)
