@@ -27,8 +27,10 @@ def jsonToRDF(json_data, parent_key=""):
 # JSONファイルを読み込む
 input_json = "B/B.json"
 with open("output/" + input_json, "r") as file:
-    data = json.load(file)
-rdf_data = jsonToRDF(data)
+    json_data = json.load(file)
+rdf_data = jsonToRDF(json_data)
+
+# プレフィックスを追加
 rdf_data = f"@prefix : <http://purl.org/net/ns/jsonrdf/> .\n{rdf_data}"
 with open("output/RDF/B.txt", "w") as file:
     file.write(rdf_data)

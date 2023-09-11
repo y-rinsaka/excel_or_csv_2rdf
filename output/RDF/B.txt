@@ -1,27 +1,17 @@
 @prefix : <http://purl.org/net/ns/jsonrdf/> .
-[
-code "011002" ;
-[
-population:種 "2005年" ;
-population:値 1880863 
-] .
-[
-population:種 "2010年" ;
-population:値 1913545 
-] .
-memo "ああ" ;
-name "sapporo" 
-] .
-[
-code "012025" ;
-[
-population:種 "2005年" ;
-population:値 294264 
-] .
-[
-population:種 "2010年" ;
-population:値 279127 
-] .
-memo "iい" ;
-name "hakodate" 
-] .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+:rdf_1 
+  :code "011002";
+  :memo "ああ";
+  :name "sapporo";
+  :population "[{'種': '2005年', '値': 1880863}, {'種': '2010年', '値': 1913545}]";
+ .
+
+:rdf_2 
+  :code "012025";
+  :memo "iい";
+  :name "hakodate";
+  :population "[{'種': '2005年', '値': 294264}, {'種': '2010年', '値': 279127}]";
+ .
+
