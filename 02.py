@@ -1,8 +1,8 @@
 import json
 
-input_json_filename = "3-総農家数"
+input_json_filename = "6-移動量"
 # JSONファイルを読み込む
-with open("output/" + input_json_filename + ".json", "r") as file:
+with open("output/tmp/" + input_json_filename + ".json", "r") as file:
     data = json.load(file)
     
 def transform_data_for_C(data):
@@ -26,7 +26,7 @@ json_for_C = transform_data_for_C(data)
 # 変換結果を出力する
 print(json.dumps(json_for_C, ensure_ascii=False, indent=2))
 # 新しいJSONファイルとして出力する
-with open("output/ireko/C/" + input_json_filename + "-C.json", "w") as file:
+with open("output/tmp/ireko/C/" + input_json_filename + "-C.json", "w") as file:
     json.dump(json_for_C, file, ensure_ascii=False, indent=2)
     
 def transform_data_for_B(data_for_C):
@@ -52,5 +52,5 @@ json_for_B = transform_data_for_B(json_for_C)
 # 変換結果を出力する
 print(json.dumps(json_for_B, ensure_ascii=False, indent=2))
 # 新しいJSONファイルとして出力する
-with open("output/ireko/B/" + input_json_filename + "-B.json", "w") as file:
+with open("output/tmp/ireko/B/" + input_json_filename + "-B.json", "w") as file:
     json.dump(json_for_B, file, ensure_ascii=False, indent=2)

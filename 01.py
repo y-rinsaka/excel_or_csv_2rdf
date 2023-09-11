@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-excel_file_path = "input/01.xlsx"
+excel_file_path = "input/01.xls"
 
 
 def toOneHeader(df):
@@ -53,14 +53,14 @@ def toJSON(df, path):
 def createA(df):
     #複数データに対応させる
     df = toOneHeader(df)
-    toJSON(df, "A/A.json")
+    toJSON(df, "JSON/A.json")
 
 
 def createBC(dfs):
     i = 1
     for name, group in dfs:
         group = toOneHeader(group)
-        toJSON(group, "{0}-{1}.json".format(i, name))
+        toJSON(group, "tmp/{0}-{1}.json".format(i, name))
         i += 1
 
 

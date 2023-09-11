@@ -43,7 +43,7 @@ def dict_value_to_rdf(key, value, rdf_text):
 #jsonファイルの読み込み
 json_file_names = ["A", "B", "C"]
 for file_name in json_file_names:
-    with open("output/{0}/{0}.json".format(file_name), "r", encoding="utf-8") as json_file:
+    with open("output/JSON/{0}.json".format(file_name), "r", encoding="utf-8") as json_file:
         input_data = json.load(json_file)
 
     # RDFデータ生成

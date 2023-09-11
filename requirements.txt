@@ -9,3 +9,4 @@ pytz==2023.3
 rdflib==7.0.0
 six==1.16.0
 tzdata==2023.3
+xlrd==2.0.1

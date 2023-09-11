@@ -18,7 +18,7 @@ def combine_json_lists(json_lists):
             combined_list[i].update(item)
     return combined_list
 
-output_directory = "output"
+output_directory = "output/tmp"
 ireko_B_path = os.path.join(output_directory, "ireko/B")
 ireko_C_path = os.path.join(output_directory, "ireko/C")
 
@@ -35,10 +35,10 @@ combined_list_B = combine_json_lists(json_lists_B)
 combined_list_C = combine_json_lists(json_lists_C)
 
 # 結合結果を出力
-with open(os.path.join(output_directory, "B/B.json"), "w") as output_file_B:
+with open("output/JSON/B.json", "w") as output_file_B:
     json.dump(combined_list_B, output_file_B, indent=2, ensure_ascii=False)
 
-with open(os.path.join(output_directory, "C/C.json"), "w") as output_file_C:
+with open("output/JSON/C.json", "w") as output_file_C:
     json.dump(combined_list_C, output_file_C, indent=2, ensure_ascii=False)
 
 
