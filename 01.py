@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-excel_file_path = "input/01.xls"
+excel_file_path = "input/02.xlsx"
 
 
 def toOneHeader(df):
@@ -25,7 +25,7 @@ def columnToStr(input_column_nums):
 
     selected_nums = input_column_nums.split(",")
     for i in selected_nums:
-        column_str[int(i)] = "str"
+        column_str[int(i)-1] = "str"
     return column_str
 
 # JSONデータ内の改行文字を除去する関数
@@ -67,7 +67,7 @@ def createBC(dfs):
 input_df = pd.read_excel(
     excel_file_path,
     header=[0, 1],
-    dtype=columnToStr(input("文字列としたい数値が含まれる列があれば選択（例:1,2）：")),
+    dtype=columnToStr(input("文字列としたい数値が含まれる列があれば列番号を記入（例:1,2）：")),
 )
 
 input_df = input_df.rename(columns=lambda x: x if not "Unnamed" in str(x) else "")
