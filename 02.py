@@ -1,6 +1,6 @@
 import json
 
-input_json_filename = "6-移動量"
+input_json_filename = "4-population"
 # JSONファイルを読み込む
 with open("output/tmp/" + input_json_filename + ".json", "r") as file:
     data = json.load(file)
