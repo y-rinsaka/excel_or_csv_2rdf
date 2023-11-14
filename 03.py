@@ -1,7 +1,7 @@
 import os
 import json
 
-ireko_filename_list = ["2-排出量.json", "6-移動量.json"]
+ireko_filename_list = ["4-population.json"]
 def read_json_files(directory_path):
     json_data = []
     for filename in os.listdir(directory_path):

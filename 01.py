@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-excel_file_path = "input/02.xlsx"
+excel_file_path = "input/input.xlsx"
 
 
 def toOneHeader(df):
@@ -44,7 +44,6 @@ def toJSON(df, path):
     # Convert DataFrame to JSON string
     json_data = df.to_json(orient="records", indent=2, force_ascii=False)
     json_data = json_data.replace(r"\n", "")
-    print(type(json_data))
     # Write JSON data to a file
     with open("output/" + path, "w", encoding="utf-8") as f:
         json.dump(json.loads(json_data), f, indent=2, ensure_ascii=False)
