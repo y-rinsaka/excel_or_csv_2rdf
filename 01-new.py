@@ -141,7 +141,7 @@ def createA_T(df):
     df = pd.DataFrame(data_for_transpose, index=df.index, columns=df.columns[1:]).transpose()
     df = df.reset_index(drop=True)
     df.insert(0, "項目", primary_column)
-    toJSON(df, "JSON/A-T.json")
+    toJSON(df, "JSON/A-Transposed.json")
     
 def createC_T(original_data):
     result = {}
@@ -159,8 +159,8 @@ def createC_T(original_data):
             if key != "項目":
                 current_dict[key] = value
 
-    # 結果を "C-T.json" に書き込み
-    with open("output/JSON/C-T.json", "w", encoding="utf-8") as output_file:
+    # 結果を "C-Transposed.json" に書き込み
+    with open("output/JSON/C-Transposed.json", "w", encoding="utf-8") as output_file:
         json.dump(result, output_file, ensure_ascii=False, indent=2)
 
 
@@ -186,30 +186,30 @@ df = df.drop(df.columns[0], axis=1)
 # print(df, "dfやで")
 
 createA(df, input_header_num)
-createA(deleteTotalRow(df), input_header_num, "-NoTotal")
+createA(deleteTotalRow(df), input_header_num, "-NoTotalRow")
 createA_T(df)
 
 dfs = grouping(df)
 
 with open("output/JSON/A.json", "r", encoding="utf-8") as file:
     A_json = json.load(file)
-with open("output/JSON/A-T.json", "r", encoding="utf-8") as file:
+with open("output/JSON/A-Transposed.json", "r", encoding="utf-8") as file:
     A_T_json = json.load(file)
-with open("output/JSON/A-NoTotal.json", "r", encoding="utf-8") as file:
+with open("output/JSON/A-NoTotalRow.json", "r", encoding="utf-8") as file:
     A_deleteTotalRow_json = json.load(file)
     
 createC(A_json)
-createC(A_deleteTotalRow_json, "-NoTotal")
+createC(A_deleteTotalRow_json, "-NoTotalRow")
 # createB_T(A_T_json)
 createC_T(A_T_json)
 
 #やったこと
 # 1. A.json, C.jsonを作成
-# 2. A-T.json, C-T.jsonを作成（行と列を入れ替えた）
+# 2. A-Transposed.json, C-Transposed.jsonを作成（行と列を入れ替えた）
 
 #今後
 # 1. B.jsonを作成
-# 2. B-T.jsonを作成
+# 2. B-Transposed.jsonを作成
 # 3. 合計行の処理を、JSON上で行う（まず方法論見直し）
 # 4. CSVファイルを読み込み、共通リソースの正規化を行う
 
@@ -221,11 +221,11 @@ createC_T(A_T_json)
 #     for transposed_df in transposed_dfs:
 #         if transposed_df.values.tolist()[0][0] == transposed_df.columns.values.tolist()[0]: # すなわち1行ヘッダーのカラムについて
 
-#             toJSON(transposed_df, "JSON/tmp/A-T{}.json".format(count))
+#             toJSON(transposed_df, "JSON/tmp/A-Transposed{}.json".format(count))
             
 #             continue
 #         else:
-#             toJSON(transposed_df, "JSON/tmp/A-T{}.json".format(count))
+#             toJSON(transposed_df, "JSON/tmp/A-Transposed{}.json".format(count))
 #             count+=1
         
 #     merged_data = []
@@ -240,7 +240,7 @@ createC_T(A_T_json)
                 
 #     print(merged_data)
     
-#     with open("output/JSON/A-T.json", "w", encoding="utf-8") as f:
+#     with open("output/JSON/A-Transposed.json", "w", encoding="utf-8") as f:
 #         json.dump(merged_data, f, indent=2, ensure_ascii=False)
         
 # transposed_dfs = transposeDfs(dfs)
