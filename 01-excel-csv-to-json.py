@@ -128,8 +128,6 @@ def multi_columns(df):
     cols.names = tuple([None for x in cols.names])
     return df
 
-
-
 def grouping(df):
     # 列名の最初のハイフン前の部分を抽出
     group_keys = df.columns.str.split('-').str[0]
@@ -174,8 +172,6 @@ def createC_T(A_T_json):
     generate_json_file(C_T_json, "C-Transposed.json")
     return C_T_json
 
-
-
 def createB_T(C_T_json):
     def createB_T_recursive(values):
         transformed_values = {}
@@ -190,7 +186,6 @@ def createB_T(C_T_json):
     B_T_json = createB_T_recursive(C_T_json)
     generate_json_file(B_T_json, "B-Transposed.json")
     return B_T_json
-
 
 def main():
     input_file_path = "input_3h.xlsx" # Excelファイルのパスを指定
