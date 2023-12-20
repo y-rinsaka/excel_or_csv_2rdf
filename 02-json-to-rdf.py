@@ -4,8 +4,7 @@ import os
 def json_to_rdf(json_data, prefix_map):
     rdf_text = ""
     rdf_text += "@prefix ex: {} .\n".format(prefix_map["ex"])
-    rdf_text += "[\n"
-
+    
     def serialize_value(value):
         if value is None:
             return ""
@@ -13,39 +12,63 @@ def json_to_rdf(json_data, prefix_map):
             return '"{}"'.format(value)
         else:
             return value
+    if isinstance(json_data, dict):
+        rdf_text += "[\n"
+        for i, entry in enumerate(json_data, start=1):
+            if isinstance(entry, str):
+                entry_value = json_data[entry]
+                rdf_text += "  ex:{} [\n".format(entry)
+                for key, value in entry_value.items():
+                    if isinstance(value, dict):
+                        rdf_text = dict_value_to_rdf(key, value, rdf_text, 2)
+                    else:
+                        rdf_text += '    ex:{} {};\n'.format(key, serialize_value(value))
+                rdf_text += "  ] ;\n\n"
+            else:
+                print("error: {} is neither a string nor a dictionary".format(entry))
 
-    for i, entry in enumerate(json_data, start=1):
-        if isinstance(entry, dict):
-            rdf_text += "  ex:{} [".format(i)
-            rdf_text += "\n"
+        rdf_text += "] .\n"
+        
+    else:
+        
+        for i, entry in enumerate(json_data, start=1):
+            if isinstance(entry, dict):
+                rdf_text += "["
+                rdf_text += "\n"
 
-            for key, value in entry.items():
-                if isinstance(value, dict):
-                    rdf_text = dict_value_to_rdf(key, value, rdf_text, 2)
-                elif isinstance(value, list):
-                    for dvalue_in_li in value:
-                        if isinstance(dvalue_in_li, dict):
-                            rdf_text = dict_value_to_rdf(key, dvalue_in_li, rdf_text, 2)
-                        else:
-                            print("error")
-                else:
-                    rdf_text += '    ex:{} {};\n'.format(key, serialize_value(value))
-            rdf_text += "  ] ;\n\n"
-        elif isinstance(entry, str):
-            entry_value = json_data[entry]
-            rdf_text += "  ex:{} [\n".format(entry)
+                for key, value in entry.items():
+                    if isinstance(value, dict):
+                        rdf_text = dict_value_to_rdf(key, value, rdf_text, 1)
+                    elif isinstance(value, list):
+                        for dvalue_in_li in value:
+                            if isinstance(dvalue_in_li, dict):
+                                rdf_text = dict_value_to_rdf(key, dvalue_in_li, rdf_text, 1)
+                            else:
+                                print("error")
+                    else:
+                        rdf_text += '  ex:{} {};\n'.format(key, serialize_value(value))
+                rdf_text += "] .\n\n"
+            elif isinstance(entry, str):
+                entry_value = json_data[entry]
+                rdf_text += "ex:{} [\n".format(entry)
 
-            for key, value in entry_value.items():
-                if isinstance(value, dict):
-                    rdf_text = dict_value_to_rdf(key, value, rdf_text, 2)
-                else:
-                    rdf_text += '    ex:{} {};\n'.format(key, serialize_value(value))
-            rdf_text += "  ] ;\n\n"
-        else:
-            print("error: {} is neither a string nor a dictionary".format(entry))
+                for key, value in entry_value.items():
+                    if isinstance(value, dict):
+                        rdf_text = dict_value_to_rdf(key, value, rdf_text, 1)
+                    else:
+                        rdf_text += '  ex:{} {};\n'.format(key, serialize_value(value))
+                rdf_text += "] .\n\n"
+            elif isinstance(entry, list):
+                for dvalue_in_li in entry:
+                    if isinstance(dvalue_in_li, dict):
+                        rdf_text = dict_value_to_rdf(key, dvalue_in_li, rdf_text, 1)
+                    else:
+                        print("error")
+            else:
+                print("error: {} is neither a string nor a dictionary".format(entry))
 
-    rdf_text += "] .\n"
 
+        
     return rdf_text
 
 def dict_value_to_rdf(key, value, rdf_text, depth):
@@ -54,6 +77,12 @@ def dict_value_to_rdf(key, value, rdf_text, depth):
     for sub_key, sub_value in value.items():
         if isinstance(sub_value, dict):
             rdf_text = dict_value_to_rdf(sub_key, sub_value, rdf_text, depth + 1)
+        elif isinstance(sub_value, list):
+            for dvalue_in_li in sub_value:
+                if isinstance(dvalue_in_li, dict):
+                    rdf_text = dict_value_to_rdf(sub_key, dvalue_in_li, rdf_text, depth + 1)
+                else:
+                    print("error")
         else:
             rdf_text += indent + '  ex:{} {};\n'.format(sub_key, serialize_value(sub_value))
     rdf_text += indent + "] ;\n"
